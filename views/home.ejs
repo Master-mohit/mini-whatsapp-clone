@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css"
+    rel="stylesheet"
+/>
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    html, body{
+        width: 100%;
+        height: 100%;
+    }
+    #main{
+        width: 100%;
+        height: 100%;
+        background-color: brown;
+        display: flex;
+    }
+    #left{
+        width: 25vw;
+        height: 100vh;
+        background-color:#131b22;
+       
+        overflow: hidden;
+    }
+    #right{
+        width: 75vw;
+        height: 100vh;
+        background-color: #272c35;
+    }
+    #left #upper{
+        height: 6vh;
+        width: 25vw;
+        /* background-color: aqua; */
+        color: #fff;
+        padding: 1vw 1.4vw;
+    }
+    #upper-part1{   
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    #upper-part1 h1{
+      font-size: 1.6vw;
+      font-weight: 700;
+    }
+    #upper-part2 h1 i{
+   margin-right: 1vw;
+   font-weight: 400;
+    }
+    #upper-part2{   
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    #footer{
+        width: 100vw;
+        height: 4vw;
+        /* background-color: red; */
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 3vw 1.2vw;
+    }
+    #footer-part1{
+        width: 30px;
+        height: 30px;
+       border-radius: 50px;
+        /* background-color: chartreuse;   */
+        overflow: hidden;
+    }
+    #footer-part1 img{
+        width: 100%;
+        height: 100%;
+        
+    }
+    #footer h3{
+        font-size: 2vw;
+        color: #fff;
+    }
+    #srch{
+        display: flex;
+        align-items: center;
+        padding: 1vw 1.4vw;
+       position: relative;
+    }
+    #srch input{
+        width: 100%;
+        background-color: transparent;
+        border-bottom: 1px solid #ffffffd8;
+        color: #fff;
+        outline: none;    
+       text-align: initial;
+    }
+    input::placeholder{
+        font-size: 1vw;
+        padding-left: 2vw;
+    }
+    #srch i{
+        position: absolute;
+        color: #b6b2b2a8;
+      pointer-events: none;
+      font-size: 1.2vw;
+    }
+    #footer h4{
+        color: #b6b2b2a8;
+       margin-left: 8vw;
+       font-size: 1.2vw;
+       /* right: 0%; */
+    }
+
+    
+</style>
+<body>
+
+
+   <div id="main">
+  <div id="left">
+    <div id="upper">
+        <div id="upper-part1">
+            <h1>Chats</h1>
+            <div id="upper-part2">
+                <h1><i class="ri-mail-unread-fill"></i></h1>
+                <h1><i class="ri-align-justify"></i></h1>
+            </div>
+        </div>
+    </div>
+    <div id="srch">
+        <input id="selectUserInput" type="text" placeholder="Search or Start a new chat">
+        <i class="ri-search-line"></i>
+    </div>
+    <div id="footer">
+        <div id="footer-part1">
+            <img src="<%= userLogdin.profileImage %>" alt="">
+        </div>
+      <h3><%= userLogdin.username %></h3>
+      <h4>01:31</h4>
+    </div>
+  </div>
+  <div id="right"></div>
+   </div>
+   <script src="/socket.io/socket.io.js"></script>
+   <script>
+     var socket = io();
+   </script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+   <script>
+     document.querySelector("#selectUserInput").addEventListener("input", async function(event){
+        const response = await axios.post("/searchUser", {
+          data:  document.querySelector("#selectUserInput").value
+        })
+     })
+   </script>
+</body>
+</html>
