@@ -40,16 +40,11 @@
         <h6>opositename</h6>
        </div>
        <div id="chat-area">
-         <div id="outgoing">
-          kaise ho
-         </div>
-         <div id="incomming">
-          badia hu
-         </div>
+
        </div>
        <div id="msg_send">
         <input type="text" placeholder="kuch likho 💫">
-        <button><h6>send</h6></button>
+        <button onclick="bhejdo()"><h6>send</h6></button>
        </div>
     </div>
     <div id="searching_div">
@@ -65,13 +60,38 @@
       <i onclick="close1()" id="close" class="ri-close-line"></i>
     </div>
    </div>
-   <script>
+   <script src="/socket.io/socket.io.js"></script>
+<script>
+    var socket = io();
+    
      function open1(){ 
       document.querySelector("#searching_div").style.display="initial"
      }
      function close1(){ 
       document.querySelector("#searching_div").style.display="none"
      }
+
+     function bhejdo(){
+      const input = document.querySelector("input").value;
+ const tem = ` <div id="outgoing">
+           ${input}
+         </div>`
+         socket.emit("max", input)
+         document.querySelector("#chat-area").innerHTML+=tem;   
+         document.querySelector("input").value = null;     
+    }
+
+    function aanevala(haa){
+      const temp = ` <div id="incomming">
+          ${haa}
+         </div>`  
+     document.querySelector("#chat-area").innerHTML+=temp;
+    }
+    socket.on("sony", function(hero){
+      aanevala(hero)
+      console.log(hero);
+    }) 
+
    </script>
 </body>
 </html>

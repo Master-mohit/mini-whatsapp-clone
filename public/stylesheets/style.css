@@ -116,12 +116,14 @@ button{
   padding: 5px;
   background-color: beige;
   margin-left: auto;
+  margin-bottom: 1vw;
 }
 #incomming{ 
   width: fit-content;
   height: 30px;
   padding: 5px;
   background-color: beige;
+  margin-bottom: 1vw;
 }
 
 #searching_div{ 
