@@ -14,22 +14,22 @@
     <div id="left">
       <div id="user_profile">
         <div class="cir">
-          <img src="<%=user.profileImage%>" alt="">
+          <img src="<%= loggedInUser.profileImage %>" alt="">
         </div>
-        <h6><%=user.username%></h6>
+        <h6><%= loggedInUser.username %></h6>
       </div>
       <div id="add_members">
              <h5><i onclick="open1()" class="ri-user-add-line"></i></h5>
       </div>
       <div id="friends_list">
-        <%user.friend.forEach((fri)=>{%>
-        <div class="friend_section">
+        <% loggedInUser.friends.forEach(friend=>{ %>
+          <div onclick="frdban('<%= friend.profileImage %>','<%= friend._id %>','<%= friend.username %>')" class="friend_section" id="shrey_<%= friend._id %>">
           <div class="cir">
-            <img src="<%=fri.profileImage%>" alt="">
+            <img src="<%=friend.profileImage%>" alt="">
           </div>
-          <h6><%=fri.username%></h6>
+          <h6><%=friend.username%></h6>
         </div>
-        <%})%>
+        <% }) %>
       </div>
     </div>
     <div id="right">
@@ -40,27 +40,30 @@
         <h6>opositename</h6>
        </div>
        <div id="chat-area">
-
+          
        </div>
        <div id="msg_send">
         <input type="text" placeholder="kuch likho 💫">
         <button onclick="bhejdo()"><h6>send</h6></button>
        </div>
     </div>
+   
     <div id="searching_div">
       <input type="search" placeholder="searche user"> 
       <div id="two">
         <div class="user">
-          <div class="cir">
+          <!-- <div class="cir">
             <img src="" alt="">
           </div>
-          <h6>user</h6>
+          
+          <h6>user</h6> -->
         </div>
       </div>
       <i onclick="close1()" id="close" class="ri-close-line"></i>
     </div>
    </div>
    <script src="/socket.io/socket.io.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     var socket = io();
     
@@ -69,7 +72,8 @@
      }
      function close1(){ 
       document.querySelector("#searching_div").style.display="none"
-     }
+     } 
+
 
      function bhejdo(){
       const input = document.querySelector("input").value;
@@ -91,6 +95,78 @@
       aanevala(hero)
       console.log(hero);
     }) 
+
+   
+    document.querySelector("#searching_div input").addEventListener("input", async(event)=>{
+     const data =  document.querySelector("#searching_div input").value
+     
+     if(data == ""){
+      return
+     }
+     const response = await axios.post("/searchuser", {
+      data: data
+     })
+
+     
+document.querySelector('#two .user').innerHTML = ""
+      response.data.forEach(searchuser => {
+        appendSearchUser(searchuser.profileImage, searchuser.username, searchuser._id)
+      });
+    }) 
+      
+  
+    function appendSearchUser(profileImage, username, id){
+      const template = `<div onclick="addFriend(event,'${id}','${profileImage}','${username}')" class="user" id="${id}" >
+          <div class="cir">
+            <img src="${profileImage}" alt="">
+          </div>
+          <h6>${username}</h6>
+        </div>`
+        document.querySelector('#two .user').innerHTML += template
+       
+    } 
+
+
+    function sidechat(){
+      if (document.querySelector(`#friends_list #shery_${id}`)) {
+        return
+      }
+      const template = `  <div class="friend_section" id="shrey_${id}">
+          <div class="cir">
+            <img src="${profileImage}" alt="">
+          </div>
+          <h6>${username}</h6>
+        </div>`
+        document.querySelector("#friends_list").innerHTML += template
+    } 
+ 
+    async function addFriend(event, id, profileImage, username) {
+      try {
+        const response = await axios.post('/addFriend', {
+          friendId: id
+        })
+
+        console.log("this is working")
+
+      } catch (err) {
+        console.log("this is error")
+      }
+
+    }
+     
+    async function frdban(profileImage, id, username){
+      document.querySelector('#right').style.display = "initial"
+  const template = `
+    <div id="${id}" class="friend-display">
+      <div class="cir">
+        <img src="${profileImage}" alt="">
+      </div>
+      <h6>${username}</h6>
+    </div>`;
+  document.querySelector("#right #friend-display").innerHTML = template;
+  document.querySelector("#right #friend-display h6").innerHTML = username;
+}
+
 
    </script>
 </body>

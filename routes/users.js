@@ -12,7 +12,7 @@ profileImage: {
 },
 socketId: String, 
 
-friend:[{ 
+friends:[{ 
   type:mongoose.Schema.Types.ObjectId , 
   ref:"user"
 }]

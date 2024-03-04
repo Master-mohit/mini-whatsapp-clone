@@ -13,11 +13,11 @@ html,body{
   width: 100vw;
   background-color: green;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 }
 #left{ 
-  width: 30%;
+  width: 28%;
   height: 100%;
   background-color: blue;
   display: flex;
@@ -26,17 +26,21 @@ html,body{
   flex-direction: column;
 }
 #right{ 
-  width: 68%;
-  height: 99%;
+  width: 72%;
+  height: 100%;
   background-color: red;
+  display: none;
 }
 #user_profile{ 
   width: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: center;
   padding: 10px;
   background-color: yellow;
+}
+#user_profile h6{
+  font-size: 1.4vw;
 }
 .cir{ 
   width: 40px;
@@ -74,21 +78,25 @@ img{
   width: 95%;
   height: 50px;
   display: flex;
-  justify-content: space-around;
+  justify-content: start;
   align-items: center;
   background-color: white;
   margin-top: 5px;
+  gap: 20px;
+  padding: 1.3vw;
 }
 
 #friend-display{ 
  width: 99%; 
  display: flex;
  align-items: center;
+ justify-content: space-between;
  padding: 10px 20px ;
  gap: 40px;
  font-size: 22px;
  border-bottom: 2px solid white;
 }
+
 
 
 #msg_send{ 
@@ -114,9 +122,10 @@ button{
   width: fit-content;
   height: 30px;
   padding: 5px;
-  background-color: beige;
+  background-color:  #dcf8c6;
   margin-left: auto;
   margin-bottom: 1vw;
+  
 }
 #incomming{ 
   width: fit-content;
@@ -150,12 +159,14 @@ button{
   width: 100%;
   height: fit-content;
   padding: 5px;
+  
+ 
 }
 .user{ 
   width: 99%;
   height: 40px;
   display: flex;
-  justify-content: space-around;
+  /* justify-content: space-around; */
   align-items: center;
 }
 #close{ 

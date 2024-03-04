@@ -41,8 +41,8 @@ router.get('/login', function(req, res, next) {
 });
 
 router.get('/home', isLoggedIn ,async function(req, res) { 
-  const user = await userModel.findOne({username:req.session.passport.user}).populate('friend')
-  res.render('home',{user});
+  const loggedInUser = await userModel.findOne({username:req.session.passport.user}).populate('friends')
+  res.render('home',{loggedInUser});
 });
 // POST login route
 router.post('/login', passport.authenticate("local", {
@@ -68,6 +68,67 @@ function isLoggedIn(req, res, next){
   res.redirect("/login");
 }
 
+router.post('/searchuser', async (req, res, next) => {
+  const data = req.body.data;
+  console.log(data);
+
+  if (typeof data !== 'string') {
+    return res.status(400).json({ error: 'Search data must be a string' });
+  }
+
+  try {
+    const allUsers = await userModel.find({
+      username: {
+        $regex: data,
+        $options: 'i'
+      }
+    });
+
+    console.log(allUsers);
+    res.status(200).json(allUsers);
+  } catch (error) {
+    console.error('Error searching users:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+router.post('/addFriend', isLoggedIn, async (req, res, next) => {
+  try {
+    const friendId = req.body.friendId;
+
+    const friendUser = await userModel.findOne({
+      _id: friendId
+    });
+
+    const loggedInUser = await userModel.findOne({
+      username: req.session.passport.user
+    });
+
+    // Check if the friend is already in the user's friend list
+    const isAlreadyFriend = loggedInUser.friends.includes(friendUser._id);
+    if (isAlreadyFriend) {
+      return res.status(200).json({
+        message: 'Already friends'
+      });
+    }
+
+    // Add friend to the logged in user's friend list
+    loggedInUser.friends.push(friendUser._id);
+
+    // Add logged in user to friendUser's friend list
+    friendUser.friends.push(loggedInUser._id);
+
+    // Save both users
+    await loggedInUser.save();
+    await friendUser.save();
+
+    // Redirect to the home page after adding friend
+    res.redirect("/home");
+  } catch (error) {
+    console.error('Error adding friend:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 
 
